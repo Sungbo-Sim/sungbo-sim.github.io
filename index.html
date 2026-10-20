@@ -1,17 +1,17 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-lang="ko">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>BRAIN FLEX — 짧고 굵은 두뇌 게임</title>
-<meta name="description" content="하루 1분 두뇌 게임 시리즈. 반복되는 일에 지친 분, 학생, 매일 조금씩 머리를 쓰고 싶은 어르신을 위해 데이터 분석가가 AI와 함께 기획부터 출시까지 만듭니다.">
+<meta name="description" content="하루 1분 두뇌 게임 시리즈. 숫자와 분석을 좋아하는 1인 제작자가 AI와 함께 기획부터 출시까지 만듭니다. 2종 출시, 양대 스토어 운영 중.">
 <meta name="author" content="Sungbo Sim">
 <meta name="theme-color" content="#0B0118">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="BRAIN FLEX">
 <meta property="og:title" content="BRAIN FLEX — 짧고 굵은 두뇌 게임">
-<meta property="og:description" content="하루 1분, 순위표도 경쟁도 없는 두뇌 게임. 데이터 분석가가 AI와 함께 기획부터 출시까지 만듭니다. 2종 출시, 양대 스토어 운영 중.">
+<meta property="og:description" content="하루 1분, 순위표도 경쟁도 없는 두뇌 게임. 숫자와 분석을 좋아하는 1인 제작자가 AI와 함께 기획부터 출시까지 만듭니다.">
 <meta property="og:url" content="https://sungbo-sim.github.io/">
 <meta property="og:image" content="https://sungbo-sim.github.io/og.png">
 <meta property="og:image:width" content="1200">
@@ -19,6 +19,21 @@
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230F0225'/%3E%3Crect x='7' y='7' width='8' height='8' rx='2' fill='%237F77DD'/%3E%3Crect x='17' y='7' width='8' height='8' rx='2' fill='%235DCAA5'/%3E%3Crect x='7' y='17' width='8' height='8' rx='2' fill='%23EF9F27'/%3E%3Crect x='17' y='17' width='8' height='8' rx='2' fill='%237F77DD' opacity='.4'/%3E%3C/svg%3E">
+
+<script>
+/* 언어 먼저 정하기 — 화면 깜빡임 방지 (?lang= → 저장값 → 브라우저 언어) */
+(function(){
+  var l=null;
+  try{
+    var q=new URLSearchParams(location.search).get('lang');
+    if(q==='ko'||q==='en') l=q;
+    if(!l) l=localStorage.getItem('bf-lang');
+  }catch(e){}
+  if(l!=='ko'&&l!=='en') l=(navigator.language||'ko').toLowerCase().indexOf('ko')===0?'ko':'en';
+  document.documentElement.setAttribute('data-lang',l);
+  document.documentElement.setAttribute('lang',l);
+})();
+</script>
 
 <style>
   :root{
@@ -45,8 +60,24 @@
   a:hover{text-decoration:underline}
   a:focus-visible{outline:2px solid var(--violet);outline-offset:3px;border-radius:4px}
 
+  /* ── 언어 전환 ── */
+  html[data-lang="ko"] .i18n-en{display:none}
+  html[data-lang="en"] .i18n-ko{display:none}
+  .lang{
+    margin-left:auto;display:flex;gap:4px;padding:3px;flex:none;
+    border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.02);
+  }
+  .lang button{
+    font:inherit;font-size:12px;font-weight:600;letter-spacing:.02em;
+    color:var(--muted);background:none;border:0;padding:5px 12px;
+    border-radius:999px;cursor:pointer;transition:color .15s ease,background .15s ease;
+  }
+  .lang button:hover{color:var(--fg)}
+  .lang button[aria-pressed="true"]{background:rgba(127,119,221,.22);color:var(--fg)}
+  .lang button:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+
   /* ── header ── */
-  header{padding:clamp(56px,11vw,104px) 0 clamp(28px,6vw,48px)}
+  header{padding:clamp(44px,9vw,88px) 0 clamp(28px,6vw,48px)}
   .mark{display:flex;align-items:center;gap:12px;margin-bottom:26px}
   .mark svg{flex:none}
   .mark b{font-size:14px;letter-spacing:.22em;font-weight:700;color:var(--muted)}
@@ -55,8 +86,7 @@
     font-size:clamp(34px,7.5vw,60px); line-height:1.12;
   }
   h1 em{font-style:normal;background:linear-gradient(100deg,var(--violet),var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .lede{font-size:clamp(16px,2.4vw,19px);color:var(--muted);margin:0 0 10px;max-width:60ch}
-  .lede-en{font-size:14px;color:var(--dim);margin:0;max-width:62ch}
+  .lede{font-size:clamp(16px,2.4vw,19px);color:var(--muted);margin:0;max-width:60ch}
 
   .who{margin:26px 0 0;padding:2px 0 2px 18px;border-left:2px solid rgba(127,119,221,.45);max-width:58ch}
   .who p{margin:0;font-size:15.5px;color:#D6D2EA;line-height:1.7}
@@ -71,8 +101,12 @@
   .about p{margin:0;font-size:15.5px;color:#D6D2EA}
   .about p + p{margin-top:12px;color:var(--muted);font-size:14.5px}
   .about strong{color:var(--fg);font-weight:600}
+  .about .kicker{
+    margin-top:18px;padding-top:16px;border-top:1px solid var(--line);
+    font-size:15px;color:var(--teal);font-weight:600;
+  }
 
-  .stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;list-style:none;padding:0}
+  .stats{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 0;list-style:none;padding:0}
   .stats li{
     font-size:13px;color:var(--muted);padding:7px 13px;
     border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.02);
@@ -101,7 +135,7 @@
   }
   .card h3{margin:0 0 4px;font-size:19px;font-weight:700;letter-spacing:-.01em}
   .card .en{margin:0 0 10px;font-size:12.5px;color:var(--dim);letter-spacing:.02em}
-  .card p{margin:0 0 16px;font-size:14px;color:var(--muted);min-height:2.6em}
+  .card .desc{margin:0 0 16px;font-size:14px;color:var(--muted);min-height:2.6em}
   .links{display:flex;flex-wrap:wrap;gap:8px}
   .links a{
     font-size:12.5px;padding:6px 12px;border-radius:999px;
@@ -113,7 +147,7 @@
   .c2{background:linear-gradient(135deg,#5DCAA5,#EF9F27)}
   .card.next{border-style:dashed;background:transparent}
   .card.next h3{color:var(--muted)}
-  .card.next p{min-height:0}
+  .card.next .desc{min-height:0}
 
   /* ── process ── */
   .steps{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));list-style:none;padding:0;margin:0}
@@ -144,42 +178,100 @@
         <rect x="17" y="17" width="8" height="8" rx="2" fill="#7F77DD" opacity=".4"/>
       </svg>
       <b>BRAIN FLEX</b>
+      <div class="lang" role="group" aria-label="Language / 언어">
+        <button type="button" data-set-lang="ko" aria-pressed="true">한국어</button>
+        <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+      </div>
     </div>
 
-    <h1>짧고 굵은<br><em>두뇌 게임</em>을 만듭니다</h1>
-    <p class="lede">하루 1분, 어제의 나보다 조금 더 빨라지는 경험. 순위표도 경쟁도 없습니다.</p>
-    <p class="lede-en">Brain training games, made small and sharp — one minute a day, no leaderboards, no pressure.</p>
+    <h1 class="i18n-ko">짧고 굵은<br><em>두뇌 게임</em>을 만듭니다</h1>
+    <h1 class="i18n-en">I make short, sharp<br><em>brain games</em></h1>
+
+    <p class="lede i18n-ko">하루 1분, 어제의 나보다 조금 더 빨라지는 경험. 순위표도 경쟁도 없습니다.</p>
+    <p class="lede i18n-en">One minute a day, a little quicker than yesterday. No leaderboards, no competition.</p>
 
     <div class="who">
-      <p>똑같은 일이 반복돼 <b>머리가 굳은 것 같은 날</b>, 집중력을 깨우고 싶은 <b>학생</b>,
-         매일 조금씩 머리를 쓰고 싶은 <b>부모님과 어르신</b>을 생각하며 만듭니다.</p>
-      <p class="who-sub">기억력 · 집중력 · 공간지각처럼 평소 잘 쓰지 않는 뇌 기능을 하나씩 꺼내 씁니다.</p>
+      <div class="i18n-ko">
+        <p>똑같은 일이 반복돼 <b>머리가 굳은 것 같은 날</b>, 집중력을 깨우고 싶은 <b>학생</b>,
+           매일 조금씩 머리를 쓰고 싶은 <b>부모님과 어르신</b>을 생각하며 만듭니다.</p>
+        <p class="who-sub">기억력 · 집중력 · 공간지각처럼 평소 잘 쓰지 않는 뇌 기능을 하나씩 꺼내 씁니다.</p>
+      </div>
+      <div class="i18n-en">
+        <p>For the days when the same routine leaves your <b>head feeling stiff</b>, for <b>students</b>
+           who want their focus back, and for <b>parents and grandparents</b> who want to use their mind a little every day.</p>
+        <p class="who-sub">Memory, attention, spatial reasoning — one underused part of the brain at a time.</p>
+      </div>
     </div>
 
     <div class="about">
-      <p>안녕하세요, <strong>심성보</strong>입니다. 본업은 <strong>데이터 분석가</strong>이고, 개발자는 아닙니다.</p>
-      <p>재미로 시작한 일이 여기까지 왔습니다. 기획·디자인·코드·QA·스토어 출시까지 <strong>AI와 짝을 이뤄 혼자 0부터 끝까지</strong> 만들고 운영합니다. 분석가답게 숫자를 보고, 사용자가 실제로 막히는 지점을 찾아 고칩니다.</p>
-      <ul class="stats">
+      <div class="i18n-ko">
+        <p>안녕하세요, <strong>심성보</strong>입니다. 영어로는 Kenneth라고 불러요.</p>
+        <p>회사 소개 페이지는 아니에요. 저는 <strong>재미있어 보이면 일단 붙잡고 끝까지 만들어보는 편</strong>인데,
+           이 게임들도 딱 그렇게 나왔습니다. "한번 해볼까?" 하고 시작했더니 어느새 시리즈가 됐네요.</p>
+        <p><strong>숫자를 좋아합니다.</strong> 데이터에서 패턴 찾는 것도 좋아하고, 주식이랑 시장 들여다보는 것도 좋아해요.
+           주말마다 몇 년째 경제 공부를 하고 있고, <strong>언젠가 제 사업체를 여는 걸 늘 꿈꿉니다.</strong>
+           그래서 자꾸 이것저것 벌여놓게 되네요.</p>
+        <p>사실 <strong>BRAIN FLEX</strong>도 그 연습이에요. 1인 하이퍼캐주얼 게임 회사인데,
+           직원이 <strong>열세 명</strong> 있습니다. 전부 AI예요. 기획하는 친구, 디자인하는 친구,
+           버그 잡는 친구, 출시 담당까지 다 있고 회의도 합니다. 저는 대표고요 — 다행히 월급은 안 나갑니다.</p>
+        <p>게임도 비슷하게 만듭니다. 숫자를 보고, 사람들이 실제로 어디서 막히는지 찾아서 고치고요.
+           그래도 결국 <strong>재미로 만드는 것</strong>이라 마감도 투자자도 없습니다. 만들고 싶을 때 만들고, 다 되면 올려요.</p>
+        <p>그러니 <strong>편하게 즐겨주세요.</strong> 순위표도 경쟁도 없습니다. 하루 1분, 심심할 때 한 판. 그거면 충분해요.</p>
+        <p>그 외엔 여행을 다니고(바닷속이면 더 좋습니다), 이것저것
+           <a href="https://simbbo-blog.tistory.com/" target="_blank" rel="noopener">블로그</a>에 적어둡니다.</p>
+        <p class="kicker">재미있으면 합니다. 대부분은 그게 이유예요.</p>
+      </div>
+      <div class="i18n-en">
+        <p>Hi — I'm <strong>Kenneth Sim</strong> (심성보). Good to see you here.</p>
+        <p>This isn't a company page. If something looks fun, I tend to <strong>grab it and build it all the way</strong> —
+           and that's exactly where these games came from. It started as "why not try one?" and somehow turned into a series.</p>
+        <p><strong>I like numbers.</strong> Finding patterns in data, and watching stocks and markets just as much.
+           I've been studying the economy on weekends for years now, and <strong>I've always dreamed of running my own
+           business one day.</strong> So I keep starting things.</p>
+        <p>And honestly, <strong>BRAIN FLEX</strong> is me practising for that. A one-person hypercasual
+           game studio — with <strong>thirteen employees</strong>. All of them AI. One plans, one designs,
+           one hunts bugs, one handles releases. We hold meetings and everything. I'm the CEO —
+           and thankfully, nobody needs paying.</p>
+        <p>I build games much the same way — look at the numbers, find where people actually get stuck, fix it.
+           But in the end I make them <strong>for fun</strong>, so there are no deadlines and no investors.
+           I build when I feel like it and ship when it's done.</p>
+        <p>So please, <strong>just enjoy them.</strong> No leaderboards, no competition. One minute a day,
+           one round when you're bored — that's plenty.</p>
+        <p>Otherwise I travel (underwater is better), and write bits and pieces on my
+           <a href="https://simbbo-blog.tistory.com/" target="_blank" rel="noopener">blog</a> (in Korean).</p>
+        <p class="kicker">If it's fun, I do it. That's most of the reason.</p>
+      </div>
+
+      <ul class="stats i18n-ko">
         <li><b>2종</b> 출시</li>
         <li><b>App Store</b> · <b>Google Play</b></li>
-        <li><b>1인</b> + AI 페어</li>
+        <li><b>1인</b> + AI 직원 <b>13명</b></li>
         <li>시리즈 <b>계속 확장</b></li>
+      </ul>
+      <ul class="stats i18n-en">
+        <li><b>2 games</b> shipped</li>
+        <li><b>App Store</b> · <b>Google Play</b></li>
+        <li><b>Solo</b> + <b>13</b> AI staff</li>
+        <li>Series <b>still growing</b></li>
       </ul>
     </div>
   </header>
 
   <section aria-labelledby="series-h">
     <h2 id="series-h">Brain Series</h2>
-    <p class="sub">각 게임은 뇌의 서로 다른 기능 하나를 훈련합니다. 한 판 1분, 서버 없음, 기록은 기기에만.</p>
+    <p class="sub i18n-ko">각 게임은 뇌의 서로 다른 기능 하나를 훈련합니다. 한 판 1분, 서버 없음, 기록은 기기에만.</p>
+    <p class="sub i18n-en">Each game trains one different function of the brain. One minute a round, no servers, scores stay on your device.</p>
 
     <ul class="series">
-      <!-- 새 게임 추가: 아래 <li class="card"> 블록을 복사해 번호·이름·설명·링크만 바꾸면 됩니다. -->
+      <!-- 새 게임 추가: 아래 <li class="card"> 블록을 복사해 번호·이름·설명·링크만 바꾸면 됩니다.
+           한국어 문장은 class="i18n-ko", 영어 문장은 class="i18n-en" 로 짝을 맞춰 주세요. -->
       <li class="card">
         <span class="swatch c1" aria-hidden="true"></span>
         <span class="no">SERIES 01</span>
-        <h3>미러 로직</h3>
-        <p class="en">Mirror Logic</p>
-        <p>거울에 비친 도형을 보고 원본과 변환을 추리합니다. 공간지각 · 심적 회전.</p>
+        <h3><span class="i18n-ko">미러 로직</span><span class="i18n-en">Mirror Logic</span></h3>
+        <p class="en i18n-ko">Mirror Logic</p>
+        <p class="desc i18n-ko">거울에 비친 도형을 보고 원본과 변환을 추리합니다. 공간지각 · 심적 회전.</p>
+        <p class="desc i18n-en">Read a mirrored shape and work out the original and the transformation. Spatial reasoning · mental rotation.</p>
         <div class="links">
           <a href="https://apps.apple.com/kr/app/id6809808413">App Store</a>
           <a href="https://play.google.com/store/apps/details?id=com.ken_sim.mirrorlogic">Google Play</a>
@@ -189,9 +281,10 @@
       <li class="card">
         <span class="swatch c2" aria-hidden="true"></span>
         <span class="no">SERIES 02</span>
-        <h3>거꾸로</h3>
-        <p class="en">Geokkuro</p>
-        <p>점등 순서를 거꾸로 되짚어 탭합니다. 작업기억 · 역순 회상.</p>
+        <h3><span class="i18n-ko">거꾸로</span><span class="i18n-en">Geokkuro</span></h3>
+        <p class="en i18n-ko">Geokkuro</p>
+        <p class="desc i18n-ko">점등 순서를 거꾸로 되짚어 탭합니다. 작업기억 · 역순 회상.</p>
+        <p class="desc i18n-en">Tap the light-up sequence back in reverse order. Working memory · reverse recall.</p>
         <div class="links">
           <a href="https://apps.apple.com/kr/app/id6809808872">App Store</a>
         </div>
@@ -199,20 +292,27 @@
 
       <li class="card next">
         <span class="no">SERIES 03</span>
-        <h3>준비 중</h3>
-        <p class="en">In the works</p>
-        <p>주의력 · 처리속도 · 언어유창성 중 하나로 이어집니다.</p>
+        <h3><span class="i18n-ko">준비 중</span><span class="i18n-en">In the works</span></h3>
+        <p class="en i18n-ko">In the works</p>
+        <p class="desc i18n-ko">주의력 · 처리속도 · 언어유창성 중 하나로 이어집니다.</p>
+        <p class="desc i18n-en">Next up: attention, processing speed, or verbal fluency.</p>
       </li>
     </ul>
   </section>
 
   <section aria-labelledby="how-h">
     <h2 id="how-h">How it's built</h2>
-    <p class="sub">비개발자가 AI와 함께 게임을 만들고 운영하는 방식.</p>
-    <ul class="steps">
+    <p class="sub i18n-ko">비개발자가 AI와 함께 게임을 만들고 운영하는 방식.</p>
+    <p class="sub i18n-en">How a non-developer builds and runs games with AI.</p>
+    <ul class="steps i18n-ko">
       <li class="step"><i>01 · 기획</i><b>문제를 하나만 고른다</b><span>한 게임이 훈련하는 능력은 딱 하나. 기능을 더하지 않고 덜어냅니다.</span></li>
       <li class="step"><i>02 · 제작</i><b>AI와 짝프로그래밍</b><span>React Native · TypeScript. 코드를 직접 쓰지 못해도, 무엇이 왜 필요한지는 정의할 수 있습니다.</span></li>
       <li class="step"><i>03 · 운영</i><b>숫자로 고친다</b><span>스토어 지표와 실제 플레이에서 막히는 지점을 찾아 매일 조금씩 고칩니다.</span></li>
+    </ul>
+    <ul class="steps i18n-en">
+      <li class="step"><i>01 · PLAN</i><b>Pick exactly one problem</b><span>Each game trains one single ability. I take features away rather than add them.</span></li>
+      <li class="step"><i>02 · BUILD</i><b>Pair-programming with AI</b><span>React Native · TypeScript. I can't write the code myself, but I can define what is needed and why.</span></li>
+      <li class="step"><i>03 · RUN</i><b>Fix it with numbers</b><span>Store metrics and real play sessions show where people stall. I fix a little every day.</span></li>
     </ul>
   </section>
 
@@ -220,9 +320,11 @@
     <div class="frow">
       <a href="mailto:sungbosim1993@gmail.com">sungbosim1993@gmail.com</a>
       <span class="sep">·</span>
-      <a href="/mirror-logic-privacy/">미러 로직 개인정보처리방침</a>
+      <a href="https://simbbo-blog.tistory.com/" target="_blank" rel="noopener"><span class="i18n-ko">블로그</span><span class="i18n-en">Blog (Korean)</span></a>
       <span class="sep">·</span>
-      <a href="/geokkuro-privacy/">거꾸로 개인정보처리방침</a>
+      <a href="/mirror-logic-privacy/"><span class="i18n-ko">미러 로직 개인정보처리방침</span><span class="i18n-en">Mirror Logic privacy policy</span></a>
+      <span class="sep">·</span>
+      <a href="/geokkuro-privacy/"><span class="i18n-ko">거꾸로 개인정보처리방침</span><span class="i18n-en">Geokkuro privacy policy</span></a>
     </div>
     <div class="frow" style="margin-top:12px">
       <span>© 2026 BRAIN FLEX · Sungbo Sim</span>
@@ -230,5 +332,22 @@
   </footer>
 
 </div>
+
+<script>
+(function(){
+  var html=document.documentElement;
+  var btns=[].slice.call(document.querySelectorAll('[data-set-lang]'));
+  function apply(lang){
+    html.setAttribute('data-lang',lang);
+    html.setAttribute('lang',lang);
+    btns.forEach(function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-set-lang')===lang ? 'true':'false'); });
+    try{ localStorage.setItem('bf-lang',lang); }catch(e){}
+  }
+  apply(html.getAttribute('data-lang')||'ko');
+  btns.forEach(function(b){
+    b.addEventListener('click',function(){ apply(b.getAttribute('data-set-lang')); });
+  });
+})();
+</script>
 </body>
 </html>
